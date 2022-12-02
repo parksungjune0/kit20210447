@@ -1,0 +1,138 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<windows.h>
+
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
+
+typedef struct PlayerPoint
+{
+	int pXPos;
+	int pYPos;
+};
+
+typedef struct PlayerMap
+{
+	int map[10][10] = {
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,0,0,0,0,0,0,0,3,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,2,1},
+		{1,1,1,1,1,1,1,1,1,1},
+	};
+};
+
+void MapSpace(PlayerPoint*, int(*)[10]);
+void AutoMove(PlayerPoint*, int(*)[10], int);
+
+void main()
+{
+	srand(time(NULL));
+
+	int health = 200;
+
+	PlayerPoint pp = { 1, 1 };
+	PlayerMap pm;
+
+	for (int i = 2;i < 8;i++)
+	{
+		for (int j = 2;j < 8;j++)
+		{
+			pm.map[i][j] = rand() % 2;
+		}
+	}
+
+	while (1)
+	{
+		system("cls");
+		MapSpace(&pp, pm.map);
+
+		int controls = 0;
+		controls = rand() % 4 + 1;
+		AutoMove(&pp, pm.map, controls);
+
+		if ();
+		{
+			printf("미로를 탈출하셨습니다.\n");
+			break;
+		}
+
+		Sleep(1000);
+	}
+}
+
+void AutoMove(PlayerPoint* pp, int(*p)[10], int ctl)
+{
+	switch (ctl)
+	{
+	case UP:
+		pp->pYPos--;
+		if (p[pp->pYPos][pp->pXPos] == 1)
+		{
+			pp->pYPos++;
+		}
+		break;
+	case DOWN:
+		pp->pYPos++;
+		if (p[pp->pYPos][pp->pXPos] == 1)
+		{
+			pp->pYPos--;
+		}
+		break;
+	case LEFT:
+		pp->pXPos++;
+		if (p[pp->pYPos][pp->pXPos] == 1)
+		{
+			pp->pXPos--;
+		}
+		break;
+	case RIGHT:
+		pp->pXPos--;
+		if (p[pp->pYPos][pp->pXPos] == 1)
+		{
+			pp->pXPos++;
+		}
+		break;
+	}
+}
+
+void MapSpace(PlayerPoint* pp, int(*p)[10])
+{
+	for (int y = 0; y < 10; y++)
+	{
+		for (int x = 0; x < 10; x++)
+		{
+			if (pp->pYPos == y && pp->pXPos == x)
+			{
+				printf("P ");
+			}
+			else
+			{
+				switch (p[y][x])
+				{
+				case 0:
+					printf("  ");
+					break;
+				case 1:
+					printf("■");
+					break;
+				case 2:
+					printf("★");
+					break;
+				case 3:
+					printf("※");
+					break;
+				}
+			}
+		}
+		printf("\n");
+	}
+}
